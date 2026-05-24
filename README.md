@@ -10,13 +10,13 @@ A Redmine plugin that brings smart autocomplete and linking to every wiki text a
 
 ## Features
 
-- **`{{` — Macro autocomplete**: type `{{` to get a dropdown of all available Redmine macros with descriptions and a full detail panel
-- **`@` — Instant mention dropdown**: shows up immediately after `@` (no minimum character required), capped at 10 results for performance
 - **`>>` — Smart Linker**: multi-level panel to build any link without knowing the syntax:
   - 🔗 **General links**: E-Mail (`mailto:`), Web URL, current page attachments
   - 📁 **Project → Issues**: cross-project issue links (`identifier#42`)
   - 📁 **Project → Members**: `@login` mentions
   - 📁 **Project → Wiki pages**: `[[identifier:Page]]` links
+- **`{{` — Macro autocomplete**: type `{{` to get a dropdown of all available Redmine macros with descriptions and a full detail panel
+- **`@` — Instant mention dropdown**: shows up immediately after `@` (no minimum character required), capped at 10 results for performance
 
 All features work in **every wiki text area**: wiki pages, issue descriptions, issue notes, journal edits, news comments, forum messages, and project/document descriptions.
 
@@ -30,6 +30,7 @@ All features work in **every wiki text area**: wiki pages, issue descriptions, i
 > The plugin directory **MUST** be named `redmine_sublink` for the hook to load correctly.
 
 1. **Clone** into your plugins directory:
+
    ```bash
    cd /path/to/redmine/plugins
    git clone https://github.com/subversive-tools/redmine_sublink.git redmine_sublink

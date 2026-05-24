@@ -93,7 +93,7 @@
    * Panel bauen (Drei Spalten für macOS Finder Column View)
    * ════════════════════════════════════════════════════════════════════════ */
   function buildPanel() {
-    panel = mk('div', 'sl-panel');
+    panel = mk('div', 'sl-panel tribute-container');
     panel.style.cssText = 'display:none;position:fixed;z-index:100000;width:280px;';
     panel.setAttribute('role', 'listbox');
 
@@ -1121,7 +1121,7 @@
       if (item.disabled) return '<li class="sl-disabled">' + h(item.label) + '</li>';
 
       var classes = [];
-      if (i === selIdx) classes.push('sl-selected');
+      if (i === selIdx) classes.push('highlight');
       if (item.hasSubmenu) classes.push('sl-has-submenu');
 
       var classStr = classes.length ? ' class="' + classes.join(' ') + '"' : '';
@@ -1201,7 +1201,7 @@
 
     var lis = pList.querySelectorAll('li[data-idx]');
     lis.forEach(function (li, i) {
-      li.classList.toggle('sl-selected', i === selIdx);
+      li.classList.toggle('highlight', i === selIdx);
       li.setAttribute('aria-selected', String(i === selIdx));
     });
     if (lis[selIdx]) lis[selIdx].scrollIntoView({ block: 'nearest' });

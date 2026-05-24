@@ -77,13 +77,13 @@
 .sl-list li:last-child { border-bottom: none; }
 
 .sl-list li:hover,
-.sl-list li.sl-selected {
-  background: #2b6cb0;
+.sl-list li.highlight {
+  background: #1b75bb; /* Redmine standard blue fallback */
   color: #fff;
 }
 
 /* Inactive selection (when focus is on the other column) */
-.sl-col:not(.sl-focused) .sl-list li.sl-selected {
+.sl-col:not(.sl-focused) .sl-list li.highlight {
   background: #edf2f7;
   color: #2d3748;
 }
@@ -98,7 +98,7 @@
   padding-left: 6px;
 }
 .sl-list li:hover.sl-has-submenu::after,
-.sl-list li.sl-selected.sl-has-submenu::after {
+.sl-list li.highlight.sl-has-submenu::after {
   opacity: 0.9;
 }
 
@@ -153,9 +153,9 @@
   text-overflow: ellipsis;
 }
 .sl-list li:hover .sl-sub,
-.sl-list li.sl-selected .sl-sub { opacity: 0.85; }
+.sl-list li.highlight .sl-sub { opacity: 0.85; }
 
-.sl-col:not(.sl-focused) .sl-list li.sl-selected .sl-sub {
+.sl-col:not(.sl-focused) .sl-list li.highlight .sl-sub {
   opacity: 0.7;
 }
 
