@@ -13,52 +13,48 @@
   overflow: hidden;
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
-.sl-header {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 9px 12px;
-  background: linear-gradient(135deg, #2c5282 0%, #2b6cb0 100%);
-  color: #fff;
-  min-height: 40px;
-  box-sizing: border-box;
-}
-
-.sl-back {
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.8);
-  cursor: pointer;
-  font-size: 17px;
-  padding: 0 6px 0 0;
-  margin: 0;
-  line-height: 1;
-  flex-shrink: 0;
-  transition: color 0.12s;
-}
-.sl-back:hover { color: #fff; }
-
-.sl-title {
-  font-weight: 600;
-  font-size: 13px;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-/* ── Hinweis im Header ───────────────────────────────────────────────────── */
-.sl-hint {
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-  margin-left: auto;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
 
 /* ── Ergebnisliste ───────────────────────────────────────────────────────── */
+.sl-body {
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+}
+
+.sl-col {
+  width: 280px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-right: 1px solid #e2e8f0;
+}
+.sl-col:last-child {
+  border-right: none;
+}
+
+.sl-col-1 {
+  background: #ffffff;
+}
+
+.sl-col-2 {
+  background: #fafbfc;
+}
+
+.sl-col-3 {
+  background: #f4f6f8;
+}
+
+/* Specific styling to distinguish focused column */
+.sl-col-1.sl-focused {
+  background: #ffffff;
+}
+.sl-col-2.sl-focused {
+  background: #ffffff;
+}
+.sl-col-3.sl-focused {
+  background: #ffffff;
+}
+
 .sl-list {
   list-style: none;
   margin: 0;
@@ -84,6 +80,26 @@
 .sl-list li.sl-selected {
   background: #2b6cb0;
   color: #fff;
+}
+
+/* Inactive selection (when focus is on the other column) */
+.sl-col:not(.sl-focused) .sl-list li.sl-selected {
+  background: #edf2f7;
+  color: #2d3748;
+}
+
+/* Icon / Label indicators for items having submenus */
+.sl-has-submenu::after {
+  content: "›";
+  margin-left: auto;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0.5;
+  padding-left: 6px;
+}
+.sl-list li:hover.sl-has-submenu::after,
+.sl-list li.sl-selected.sl-has-submenu::after {
+  opacity: 0.9;
 }
 
 /* Abschnitts-Trenner */
@@ -113,9 +129,9 @@
 .sl-icon {
   flex-shrink: 0;
   width: 24px;
-  text-align: center;
-  font-size: 14px;
-  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sl-label {
@@ -138,3 +154,8 @@
 }
 .sl-list li:hover .sl-sub,
 .sl-list li.sl-selected .sl-sub { opacity: 0.85; }
+
+.sl-col:not(.sl-focused) .sl-list li.sl-selected .sl-sub {
+  opacity: 0.7;
+}
+

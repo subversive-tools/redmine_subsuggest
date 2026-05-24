@@ -10,10 +10,28 @@ class SublinkerHook < Redmine::Hook::ViewListener
     js_code = JS_FILES.filter_map  { |f| read_asset('javascripts',  f) }.join("\n")
     return '' if js_code.blank?
 
+    formatting = Setting.text_formatting.to_s
+    translations = {
+      overview:    l(:label_overview),
+      activity:    l(:label_activity),
+      issues:      l(:label_issue_plural),
+      wiki:        l(:label_wiki),
+      members:     l(:label_member_plural),
+      attachments: l(:label_attachment_plural),
+      files:       l(:label_file_plural),
+      documents:   l(:label_document_plural),
+      boards:      l(:label_board_plural),
+      repository:  l(:label_repository),
+      calendar:    l(:label_calendar),
+      gantt:       l(:label_gantt)
+    }
+
     <<~HTML.html_safe
       <style>#{css}</style>
       <script>
         window.REDMINE_MACROS = #{macros.to_json};
+        window.REDMINE_FORMATTING = #{formatting.to_json};
+        window.REDMINE_SUBPAGE_TRANSLATIONS = #{translations.to_json};
         #{js_code}
       </script>
     HTML
