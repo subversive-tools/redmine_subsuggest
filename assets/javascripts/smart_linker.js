@@ -1305,8 +1305,9 @@
 
     if (st === 'subpages') {
       if (!item.hasSubmenu) {
-        if (item.link) {
-          doInsert(item.link);
+        var linkToInsert = item.link || item.autotext || item.label;
+        if (linkToInsert) {
+          doInsert(linkToInsert);
         }
         return;
       }
@@ -1327,8 +1328,9 @@
     var item = getSelectedItem(3);
     if (!item || item.section || item.disabled) return;
 
-    if (item.link) {
-      doInsert(item.link);
+    var linkToInsert = item.link || item.autotext || item.label;
+    if (linkToInsert) {
+      doInsert(linkToInsert);
     }
   }
 
@@ -1340,8 +1342,9 @@
     var item = getSelectedItem(2);
     if (!item || item.section || item.disabled) return;
 
-    if (item.link) {
-      doInsert(item.link);
+    var linkToInsert = item.link || item.autotext || item.label;
+    if (linkToInsert) {
+      doInsert(linkToInsert);
     } else if (item.hasSubmenu) {
       handleTab2();
     }
@@ -1351,8 +1354,9 @@
     var item = getSelectedItem(3);
     if (!item || item.section || item.disabled) return;
 
-    if (item.link) {
-      doInsert(item.link);
+    var linkToInsert = item.link || item.autotext || item.label;
+    if (linkToInsert) {
+      doInsert(linkToInsert);
     }
   }
 
