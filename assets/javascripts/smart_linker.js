@@ -1305,12 +1305,6 @@
 
     if (st === 'subpages') {
       if (!item.hasSubmenu) {
-        var repl = '>>' + curProj.identifier + '>' + item.label;
-        ta.value = v.substring(0, tStart) + repl + v.substring(tEnd);
-        tEnd = tStart + repl.length;
-        ta.selectionStart = ta.selectionEnd = tEnd;
-        ta.dispatchEvent(new Event('input', { bubbles: true }));
-        ta.focus();
         return;
       }
 
@@ -1327,22 +1321,8 @@
   }
 
   function handleTab3() {
-    var item = getSelectedItem(3);
-    if (!item || item.section || item.disabled) return;
-
-    var ta = activeTa;
-    var v  = ta.value;
-
-    var txt = item.autotext || item.label;
-    if (txt) {
-      var subpageLabel = curSubpage ? getSubpageLabel(curSubpage) : '';
-      var repl = '>>' + curProj.identifier + '>' + subpageLabel + '>' + txt;
-      ta.value = v.substring(0, tStart) + repl + v.substring(tEnd);
-      tEnd = tStart + repl.length;
-      ta.selectionStart = ta.selectionEnd = tEnd;
-      ta.dispatchEvent(new Event('input', { bubbles: true }));
-      ta.focus();
-    }
+    // Do nothing on Column 3 leaf items for Tab / ArrowRight
+    return;
   }
 
   function handleEnter1() {
