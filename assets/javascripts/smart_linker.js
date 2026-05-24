@@ -1444,6 +1444,31 @@
     }
   }
 
+  /* ── Current Project Helper ──────────────────────────────────────────────── */
+  function detectCurrentProjectIdentifier() {
+    // 1. From URL pathname
+    var m = location.pathname.match(/\/projects\/([^\/]+)/);
+    if (m) return m[1];
+    
+    // 2. From Header breadcrumbs (last link inside h1 under #header)
+    var headerLinks = document.querySelectorAll('#header h1 a');
+    for (var i = headerLinks.length - 1; i >= 0; i--) {
+      var href = headerLinks[i].getAttribute('href') || '';
+      var m2 = href.match(/\/projects\/([^\/]+)/);
+      if (m2) return m2[1];
+    }
+    
+    // 3. Fallback to active menu item
+    var activeMenu = document.querySelector('#main-menu a.active, #main-menu a.selected');
+    if (activeMenu) {
+      var href = activeMenu.getAttribute('href') || '';
+      var m3 = href.match(/\/projects\/([^\/]+)/);
+      if (m3) return m3[1];
+    }
+    
+    return urlProjId;
+  }
+
   /* ── Link Under Cursor Editing ───────────────────────────────────────────── */
   function getLinkOrTokenAtCursor(ta) {
     var val = ta.value;
@@ -1486,7 +1511,7 @@
     while ((match = dbRegex.exec(val)) !== null) {
       if (pos >= match.index && pos <= match.index + match[0].length) {
         var target = match[1];
-        var proj = urlProjId || '';
+        var proj = detectCurrentProjectIdentifier() || '';
         var item = target;
         var colonIdx = target.indexOf(':');
         if (colonIdx !== -1) {
@@ -1547,7 +1572,22 @@
       }
     }
 
-    // Pattern 7: Issue shorthand link: #123 or issue#123
+    // Pattern 7: Project-specific Issue shorthand link: sandbox#123
+    var issueProjRegex = /\b([a-z0-9\-_]+)#(\d+)\b/gi;
+    while ((match = issueProjRegex.exec(val)) !== null) {
+      if (pos >= match.index && pos <= match.index + match[0].length) {
+        candidates.push({
+          type: 'issue_project',
+          text: match[0],
+          project: match[1],
+          issueId: match[2],
+          start: match.index,
+          end: match.index + match[0].length
+        });
+      }
+    }
+
+    // Pattern 8: Issue shorthand link: #123 or issue#123
     var issueRawRegex = /(?:issue)?#(\d+)/g;
     while ((match = issueRawRegex.exec(val)) !== null) {
       if (pos >= match.index && pos <= match.index + match[0].length) {
@@ -1572,11 +1612,16 @@
   }
 
   function parseLinkToQuery(candidate) {
-    var project = urlProjId || '';
+    var project = detectCurrentProjectIdentifier() || '';
     var subpageKey = '';
     var subitem = '';
 
-    if (candidate.type === 'issue_raw') {
+    if (candidate.type === 'issue_project') {
+      project = candidate.project;
+      subpageKey = 'issues';
+      subitem = '#' + candidate.issueId;
+    }
+    else if (candidate.type === 'issue_raw') {
       subpageKey = 'issues';
       subitem = '#' + candidate.issueId;
     }
@@ -1634,15 +1679,15 @@
     
     if (subpageKey) {
       var subpageLabel = getSubpageLabel(subpageKey);
-      q += ' > ' + subpageLabel;
+      q += '>' + subpageLabel;
       
       if (subitem) {
-        q += ' > ' + subitem;
+        q += '>' + subitem;
       } else {
-        q += ' > ';
+        q += '>';
       }
     } else if (project) {
-      q += ' > ';
+      q += '>';
     }
     
     return q;
