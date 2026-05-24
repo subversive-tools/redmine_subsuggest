@@ -236,6 +236,12 @@
           };
         })
       : [{ label: 'Kein Projekt gefunden', disabled: true }]);
+
+    // Aktuelles Projekt vorauswählen (steht immer an erster Stelle)
+    if (!q && urlProjId && filtered.some(function (p) { return p.identifier === urlProjId; })) {
+      selIdx = 0;
+      applyHL();
+    }
   }
 
   /* ════════════════════════════════════════════════════════════════════════
