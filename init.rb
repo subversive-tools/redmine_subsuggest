@@ -15,7 +15,7 @@ Redmine::Plugin.register :redmine_sublink do
   name        'Sublink'
   author      'Stefan Mischke'
   description 'Smart linking and autocomplete for Redmine — macros ({{), @-mentions, and the >> Smart Linker for issues, wiki pages, members, e-mail, web and attachments.'
-  version     '0.2.0'
+  version     '0.3.0'
   url         'https://github.com/subversive-tools/redmine_sublink'
   author_url  'https://github.com/modoq'
 end
