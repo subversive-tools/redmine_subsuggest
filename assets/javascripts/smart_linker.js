@@ -1623,7 +1623,7 @@
       svgContent = '<circle cx="12" cy="12" r="10"></circle>';
     }
 
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-svg sl-icon">' + svgContent + '</svg>';
+    return '<span class="sl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon-svg">' + svgContent + '</svg></span>';
   }
 
   function findFirstSelectable(items, colNum) {
