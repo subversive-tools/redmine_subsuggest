@@ -1127,10 +1127,10 @@
       var classStr = classes.length ? ' class="' + classes.join(' ') + '"' : '';
       var styleStr = item.style ? ' style="' + item.style + '"' : '';
 
-      var iconHtml = item.icon ? getIconSvg(item.icon) : '';
+      var iconHtml = item.icon ? getIconHtml(item.icon) : '<span class="sl-icon"></span>';
 
       return '<li data-idx="' + i + '"' + classStr + styleStr + ' role="option">' +
-             '<span class="sl-icon">'  + iconHtml + '</span>' +
+             iconHtml +
              '<span class="sl-label">' + h(item.label || '') + '</span>' +
              (item.sub ? '<span class="sl-sub">' + h(item.sub) + '</span>' : '') +
              '</li>';
@@ -1539,30 +1539,27 @@
   function h(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function enc(s){ return encodeURIComponent(s); }
 
-  /* ── SVG Sprite Helpers ─────────────────────────────────────────────────── */
-  var spritePath = null;
-  function getSpritePath() {
-    if (spritePath) return spritePath;
-    var uses = document.querySelectorAll('svg use');
-    for (var i = 0; i < uses.length; i++) {
-      var href = uses[i].getAttribute('href') || uses[i].getAttribute('xlink:href') || '';
-      if (href.indexOf('icons') !== -1 && href.indexOf('.svg') !== -1) {
-        var idx = href.indexOf('#');
-        if (idx !== -1) {
-          spritePath = href.substring(0, idx);
-          return spritePath;
-        }
-      }
-    }
-    return '/assets/icons.svg';
-  }
+  /* ── Redmine Icon Helpers ────────────────────────────────────────────────── */
+  function getIconHtml(iconName) {
+    var cls = '';
+    if (iconName === 'folder')       cls = 'icon-projects';
+    else if (iconName === 'checked')  cls = 'icon-checked';
+    else if (iconName === 'history')  cls = 'icon-activity';
+    else if (iconName === 'issue')    cls = 'icon-issue';
+    else if (iconName === 'wiki-page') cls = 'icon-wiki';
+    else if (iconName === 'group')    cls = 'icon-users';
+    else if (iconName === 'attachment') cls = 'icon-attachment';
+    else if (iconName === 'file')     cls = 'icon-file';
+    else if (iconName === 'document') cls = 'icon-document';
+    else if (iconName === 'comments') cls = 'icon-comment';
+    else if (iconName === 'package')  cls = 'icon-package';
+    else if (iconName === 'time')     cls = 'icon-calendar';
+    else if (iconName === 'stats')    cls = 'icon-stats';
+    else if (iconName === 'user')     cls = 'icon-user';
+    else if (iconName === 'image-png') cls = 'icon-file';
+    else                              cls = 'icon-' + iconName;
 
-  function getIconSvg(iconName, size) {
-    var path = getSpritePath();
-    var sz = size || 18;
-    return '<svg class="s' + sz + ' icon-svg" aria-hidden="true" style="vertical-align: middle; fill: currentColor; width: ' + sz + 'px; height: ' + sz + 'px;">' +
-           '<use href="' + path + '#icon--' + iconName + '"></use>' +
-           '</svg>';
+    return '<span class="icon ' + cls + ' sl-icon"></span>';
   }
 
   function findFirstSelectable(items, colNum) {
