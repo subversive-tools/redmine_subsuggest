@@ -1208,10 +1208,42 @@
   }
 
   function loadDocuments(pid, cb) {
-    loadJSON('/projects/' + pid + '/documents.json',
-      function (d) { cache.documents[pid] = d.documents || []; cb(); },
-      function ()   { cache.documents[pid] = [];                 cb(); }
-    );
+    fetch('/projects/' + pid + '/documents', {
+      credentials: 'same-origin'
+    })
+    .then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then(function (htmlText) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(htmlText, 'text/html');
+      
+      var docs = [];
+      var seenIds = {};
+      
+      var links = doc.querySelectorAll('a');
+      links.forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        var m = href.match(/\/documents\/(?:show\/)?(\d+)$/);
+        if (m) {
+          var id = parseInt(m[1], 10);
+          var title = a.textContent.trim();
+          if (title && !seenIds[id]) {
+            seenIds[id] = true;
+            docs.push({ id: id, title: title });
+          }
+        }
+      });
+      
+      cache.documents[pid] = docs;
+      cb();
+    })
+    .catch(function (err) {
+      console.warn('[Sublink] Failed to fetch HTML documents:', err);
+      cache.documents[pid] = [];
+      cb();
+    });
   }
 
   function filterAndFormatDocuments(docsList, q) {
