@@ -1,0 +1,11 @@
+en:
+  label_loading_projects: "Loading projects…"
+  label_loading_error: "Error loading"
+  label_no_projects: "No projects found"
+  label_no_subpages: "No matching subpages"
+  label_no_issues: "No tickets found"
+  label_no_wiki: "No wiki pages"
+  label_no_members: "No members"
+  label_no_attachments: "No attachments"
+  label_no_files: "No files"
+  label_link_healed: "Link automatically updated (target was moved)"

@@ -1,0 +1,11 @@
+de:
+  label_loading_projects: "Lade Projekte…"
+  label_loading_error: "Fehler beim Laden"
+  label_no_projects: "Keine Projekte gefunden"
+  label_no_subpages: "Keine passenden Unterseiten"
+  label_no_issues: "Keine Tickets gefunden"
+  label_no_wiki: "Keine Wiki-Seiten"
+  label_no_members: "Keine Mitglieder"
+  label_no_attachments: "Keine Anhänge"
+  label_no_files: "Keine Dateien"
+  label_link_healed: "Link korrigiert (Ziel verschoben)"

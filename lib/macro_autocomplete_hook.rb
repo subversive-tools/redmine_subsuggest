@@ -23,7 +23,19 @@ class SublinkerHook < Redmine::Hook::ViewListener
       boards:      l(:label_board_plural),
       repository:  l(:label_repository),
       calendar:    l(:label_calendar),
-      gantt:       l(:label_gantt)
+      gantt:       l(:label_gantt),
+
+      # Custom plugin translations
+      loading_projects: l(:label_loading_projects),
+      loading_error:    l(:label_loading_error),
+      no_projects:      l(:label_no_projects),
+      no_subpages:      l(:label_no_subpages),
+      no_issues:        l(:label_no_issues),
+      no_wiki:          l(:label_no_wiki),
+      no_members:       l(:label_no_members),
+      no_attachments:   l(:label_no_attachments),
+      no_files:         l(:label_no_files),
+      link_healed:      l(:label_link_healed)
     }
 
     <<~HTML.html_safe

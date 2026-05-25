@@ -17,6 +17,13 @@
 (function () {
   'use strict';
 
+  function t(key, fallback) {
+    if (window.REDMINE_SUBPAGE_TRANSLATIONS && window.REDMINE_SUBPAGE_TRANSLATIONS[key]) {
+      return window.REDMINE_SUBPAGE_TRANSLATIONS[key];
+    }
+    return fallback;
+  }
+
   /* ── Konfiguration ──────────────────────────────────────────────────────── */
   var ISSUE_DEBOUNCE = 250;  // ms
 
@@ -429,12 +436,12 @@
     curProj = null;
 
     if (!cache.projects) {
-      renderColumn(1, [{ label: 'Lade Projekte…', disabled: true }], -1, true);
+      renderColumn(1, [{ label: t('loading_projects', 'Lade Projekte…'), disabled: true }], -1, true);
       loadJSON('/projects.json?limit=100', function (d) {
         cache.projects = d.projects || [];
         renderProjectsList(q);
       }, function () {
-        renderColumn(1, [{ label: 'Fehler beim Laden', disabled: true }], -1, true);
+        renderColumn(1, [{ label: t('loading_error', 'Fehler beim Laden'), disabled: true }], -1, true);
       });
       return;
     }
@@ -572,7 +579,7 @@
             style:    style
           };
         })
-      : [{ label: 'Kein Projekt gefunden', disabled: true }];
+      : [{ label: t('no_projects', 'Keine Projekte gefunden'), disabled: true }];
 
     selIdx1 = matchedIdx !== -1 ? matchedIdx : findFirstSelectable(items, 1);
     renderColumn(1, items, selIdx1, true);
@@ -658,12 +665,12 @@
 
   function resolveProjectAndRenderSubpages(projId, q) {
     if (!cache.projects) {
-      renderColumn(1, [{ label: 'Lade Projekte…', disabled: true }], -1, false);
+      renderColumn(1, [{ label: t('loading_projects', 'Lade Projekte…'), disabled: true }], -1, false);
       loadJSON('/projects.json?limit=100', function (d) {
         cache.projects = d.projects || [];
         resolveProjectAndRenderSubpages(projId, q);
       }, function () {
-        renderColumn(1, [{ label: 'Fehler beim Laden', disabled: true }], -1, false);
+        renderColumn(1, [{ label: t('loading_error', 'Fehler beim Laden'), disabled: true }], -1, false);
       });
       return;
     }
@@ -738,7 +745,7 @@
       });
 
       if (!items.length) {
-        items = [{ label: 'Keine passenden Unterseiten', disabled: true }];
+        items = [{ label: t('no_subpages', 'Keine passenden Unterseiten'), disabled: true }];
       }
       selIdx2 = matchedSubpageIdx !== -1 ? matchedSubpageIdx : findFirstSelectable(items, 2);
 
@@ -764,12 +771,12 @@
     itemsQ = q;
 
     if (!cache.projects) {
-      renderColumn(1, [{ label: 'Lade Projekte…', disabled: true }], -1, false);
+      renderColumn(1, [{ label: t('loading_projects', 'Lade Projekte…'), disabled: true }], -1, false);
       loadJSON('/projects.json?limit=100', function (d) {
         cache.projects = d.projects || [];
         resolveProjectAndSubpageAndRenderSubitems(projId, subpageName, q);
       }, function () {
-        renderColumn(1, [{ label: 'Fehler beim Laden', disabled: true }], -1, false);
+        renderColumn(1, [{ label: t('loading_error', 'Fehler beim Laden'), disabled: true }], -1, false);
       });
       return;
     }
@@ -1015,7 +1022,7 @@
   function formatIssues(issuesList) {
     var pid = curProj ? curProj.identifier : urlProjId;
     if (!issuesList || issuesList.length === 0) {
-      return [{ label: 'Keine Tickets gefunden', disabled: true }];
+      return [{ label: t('no_issues', 'Keine Tickets gefunden'), disabled: true }];
     }
     return issuesList.slice(0, 10).map(function (i) {
       var displayShort = '#' + i.id;
@@ -1037,7 +1044,7 @@
       return !lq || (p.title || '').toLowerCase().indexOf(lq) !== -1;
     });
     if (filtered.length === 0) {
-      return [{ label: 'Keine Wiki-Seiten', disabled: true }];
+      return [{ label: t('no_wiki', 'Keine Wiki-Seiten'), disabled: true }];
     }
     return filtered.slice(0, 10).map(function (p) {
       var link = pid === urlProjId ? '[[' + p.title + ']]' : '[[' + pid + ':' + p.title + ']]';
@@ -1051,7 +1058,7 @@
       return !lq || (m.name || '').toLowerCase().indexOf(lq) !== -1 || (m.login || '').toLowerCase().indexOf(lq) !== -1;
     });
     if (filtered.length === 0) {
-      return [{ label: 'Keine Mitglieder', disabled: true }];
+      return [{ label: t('no_members', 'Keine Mitglieder'), disabled: true }];
     }
     return filtered.slice(0, 10).map(function (m) {
       var nameLower = (m.name || '').toLowerCase();
@@ -1066,7 +1073,7 @@
       return !lq || (a.filename || '').toLowerCase().indexOf(lq) !== -1;
     });
     if (filtered.length === 0) {
-      return [{ label: 'Keine Anhänge', disabled: true }];
+      return [{ label: t('no_attachments', 'Keine Anhänge'), disabled: true }];
     }
     return filtered.slice(0, 10).map(function (a) {
       var isImg = /^image\//i.test(a.content_type || '');
@@ -1159,7 +1166,7 @@
       return !lq || (f.filename || '').toLowerCase().indexOf(lq) !== -1;
     });
     if (filtered.length === 0) {
-      return [{ label: 'Keine Dateien', disabled: true }];
+      return [{ label: t('no_files', 'Keine Dateien'), disabled: true }];
     }
     return filtered.slice(0, 10).map(function (f) {
       var isImg = /^image\//i.test(f.content_type || '');
@@ -1892,7 +1899,7 @@
           }
 
           if (wasHealed) {
-            showTooltipAboveCursor(ta, candidate.start, "Link korrigiert (Ziel verschoben)");
+            showTooltipAboveCursor(ta, candidate.start, t('link_healed', 'Link korrigiert (Ziel verschoben)'));
           }
         }
 
