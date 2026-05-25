@@ -62,12 +62,13 @@
     var before = val.substring(0, pos);
     var m      = before.match(/\{\{(\w*)$/);
     if (!m) { hide(); return; }
-    render(m[1], textarea);
+    var triggerIndex = pos - m[0].length;
+    render(m[1], textarea, triggerIndex);
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
-  function render(query, textarea) {
+  function render(query, textarea, triggerIndex) {
     var filtered = MACROS.filter(function (m) {
       return m.name.indexOf(query) === 0;
     });
@@ -102,7 +103,7 @@
     macDetail.textContent   = '';
     selectedIndex = 0;
 
-    position(textarea);
+    position(textarea, triggerIndex);
     dropdown.style.display = 'block';
 
     if (selectedIndex >= 0) {
@@ -195,8 +196,8 @@
   // ── Positioning (mirror-div technique) ───────────────────────────────────────
   // Uses viewport coordinates (no scroll offset) because the dropdown is position:fixed.
 
-  function position(textarea) {
-    var cursorPos = measureCursorOffset(textarea);
+  function position(textarea, triggerIndex) {
+    var cursorPos = measureCursorOffset(textarea, triggerIndex);
     var taRect    = textarea.getBoundingClientRect();
 
     // Viewport-relative coordinates for position:fixed
@@ -217,7 +218,7 @@
     dropdown.style.top  = top  + 'px';
   }
 
-  function measureCursorOffset(textarea) {
+  function measureCursorOffset(textarea, charIndex) {
     var style = window.getComputedStyle(textarea);
     var props = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
                  'letterSpacing', 'lineHeight', 'textTransform',
@@ -235,7 +236,9 @@
     mirror.style.height     = 'auto';
     mirror.style.overflow   = 'hidden';
     mirror.style.whiteSpace = 'pre-wrap';
-    mirror.textContent      = textarea.value.substring(0, textarea.selectionStart);
+
+    var index = typeof charIndex === 'number' ? charIndex : textarea.selectionStart;
+    mirror.textContent      = textarea.value.substring(0, index);
 
     var cursor = document.createElement('span');
     cursor.textContent = '\u200b'; // zero-width space
