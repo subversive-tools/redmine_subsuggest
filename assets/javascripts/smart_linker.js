@@ -182,7 +182,24 @@
    * Cursor-Positionierung (Mirror-Div-Technik)
    * ════════════════════════════════════════════════════════════════════════ */
   function posPanel(ta) {
-    var off = measureCursor(ta);
+    var charIdx = ta.selectionStart;
+    if (tStart >= 0) {
+      if (activeCol === 1) {
+        charIdx = tStart;
+      } else if (activeCol === 2) {
+        var firstGreaterIdx = ta.value.indexOf('>', tStart + 2);
+        charIdx = firstGreaterIdx !== -1 ? firstGreaterIdx : tStart;
+      } else if (activeCol === 3) {
+        var firstGreaterIdx = ta.value.indexOf('>', tStart + 2);
+        var secondGreaterIdx = -1;
+        if (firstGreaterIdx !== -1) {
+          secondGreaterIdx = ta.value.indexOf('>', firstGreaterIdx + 1);
+        }
+        charIdx = secondGreaterIdx !== -1 ? secondGreaterIdx : (firstGreaterIdx !== -1 ? firstGreaterIdx : tStart);
+      }
+    }
+
+    var off = measureCursor(ta, charIdx);
     var r   = ta.getBoundingClientRect();
     var top  = r.top  + off.top  + off.lineH + 4;
     var left = r.left + off.left;
@@ -199,7 +216,7 @@
     panel.style.top  = top  + 'px';
   }
 
-  function measureCursor(ta) {
+  function measureCursor(ta, charIdx) {
     var cs    = window.getComputedStyle(ta);
     var props = ['fontFamily','fontSize','fontWeight','fontStyle','letterSpacing',
                  'lineHeight','paddingTop','paddingRight','paddingBottom','paddingLeft',
@@ -208,7 +225,9 @@
     props.forEach(function (p) { m.style[p] = cs[p]; });
     m.style.cssText += ';position:absolute;visibility:hidden;top:-9999px;left:-9999px;' +
                        'width:' + ta.clientWidth + 'px;height:auto;overflow:hidden;white-space:pre-wrap';
-    m.textContent = ta.value.substring(0, ta.selectionStart);
+    
+    var idx = typeof charIdx === 'number' ? charIdx : ta.selectionStart;
+    m.textContent = ta.value.substring(0, idx);
     var sp = document.createElement('span');
     sp.textContent = '\u200b';
     m.appendChild(sp);
