@@ -1099,16 +1099,12 @@
       var link = '';
       if (isImg) {
         if (isMarkdownEditor()) {
-          link = '![](attachment:' + encodeURIComponent(a.filename) + ')';
+          link = '![](' + encodeURIComponent(a.filename) + ')';
         } else {
           link = '!attachment:' + a.filename + '!';
         }
       } else {
-        if (isMarkdownEditor()) {
-          link = '[' + a.filename + '](attachment:' + encodeURIComponent(a.filename) + ')';
-        } else {
-          link = 'attachment:' + a.filename;
-        }
+        link = a.filename.indexOf(' ') !== -1 ? 'attachment:"' + a.filename + '"' : 'attachment:' + a.filename;
       }
       return { icon: isImg ? 'image-png' : 'attachment', label: a.filename, sub: link, autotext: a.filename, link: link };
     });
@@ -1194,16 +1190,12 @@
       var link = '';
       if (isImg) {
         if (isMarkdownEditor()) {
-          link = '![](attachment:' + encodeURIComponent(f.filename) + ')';
+          link = '![](' + encodeURIComponent(f.filename) + ')';
         } else {
           link = '!attachment:' + f.filename + '!';
         }
       } else {
-        if (isMarkdownEditor()) {
-          link = '[' + f.filename + '](attachment:' + encodeURIComponent(f.filename) + ')';
-        } else {
-          link = 'attachment:' + f.filename;
-        }
+        link = f.filename.indexOf(' ') !== -1 ? 'attachment:"' + f.filename + '"' : 'attachment:' + f.filename;
       }
       return { icon: isImg ? 'image-png' : 'attachment', label: f.filename, sub: link, autotext: f.filename, link: link };
     });
@@ -1624,22 +1616,22 @@
       }
     }
 
-    // Pattern 4: Attachment image Markdown format: ![](attachment:file.ext)
-    var attMdImgRegex = /!\[\]\(attachment:([^\s)]+)\)/g;
+    // Pattern 4: Attachment image Markdown format: ![](attachment:file.ext) or ![](file.ext)
+    var attMdImgRegex = /!\[\]\((?:attachment:)?([^\s)]+)\)/g;
     while ((match = attMdImgRegex.exec(val)) !== null) {
       if (pos >= match.index && pos <= match.index + match[0].length) {
         candidates.push({
           type: 'attachment_md_img',
           text: match[0],
-          filename: match[1],
+          filename: decodeURIComponent(match[1]),
           start: match.index,
           end: match.index + match[0].length
         });
       }
     }
 
-    // Pattern 5: Attachment image Textile format: !attachment:file.ext!
-    var attTxImgRegex = /!attachment:([^\s!]+)!/g;
+    // Pattern 5: Attachment image Textile format: !attachment:file name.ext!
+    var attTxImgRegex = /!attachment:([^!]+)!/g;
     while ((match = attTxImgRegex.exec(val)) !== null) {
       if (pos >= match.index && pos <= match.index + match[0].length) {
         candidates.push({
@@ -1652,14 +1644,14 @@
       }
     }
 
-    // Pattern 6: Raw attachment link: attachment:file.ext
-    var attRawRegex = /\battachment:([^\s!)]+)/g;
+    // Pattern 6: Raw attachment link: attachment:file.ext or attachment:"file name.ext"
+    var attRawRegex = /\battachment:(?:"([^"]+)"|([^\s!)]+))/g;
     while ((match = attRawRegex.exec(val)) !== null) {
       if (pos >= match.index && pos <= match.index + match[0].length) {
         candidates.push({
           type: 'attachment_raw',
           text: match[0],
-          filename: match[1],
+          filename: match[1] || match[2],
           start: match.index,
           end: match.index + match[0].length
         });
