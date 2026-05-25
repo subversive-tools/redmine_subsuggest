@@ -1832,25 +1832,80 @@
   function editLinkUnderCursor(ta) {
     var candidate = getLinkOrTokenAtCursor(ta);
     if (!candidate) return false;
-    
+
+    // Detect if the link points to a wiki page to attempt cross-project redirect healing
+    var isWiki = false;
+    var wikiUrl = '';
+
+    if (candidate.type === 'double_bracket') {
+      isWiki = true;
+      wikiUrl = '/projects/' + candidate.project + '/wiki/' + encodeURIComponent(candidate.subitem.replace(/ /g, '_'));
+    } else if (candidate.type === 'textile_link' || candidate.type === 'markdown_link') {
+      var url = candidate.url;
+      if (url.indexOf(location.origin) === 0) {
+        url = url.substring(location.origin.length);
+      }
+      if (url.match(/\/projects\/([^\/]+)\/wiki\/([^\/?#]+)/)) {
+        isWiki = true;
+        wikiUrl = url.split(/[?#]/)[0]; // Strip query and fragment
+      }
+    }
+
+    if (isWiki && wikiUrl) {
+      resolveWikiRedirectAndEdit(ta, candidate, wikiUrl);
+      return true;
+    }
+
+    return proceedWithEdit(ta, candidate);
+  }
+
+  function resolveWikiRedirectAndEdit(ta, candidate, wikiUrl) {
+    fetch(wikiUrl, { method: 'HEAD', credentials: 'same-origin' })
+      .then(function (res) {
+        var finalUrl = res.url;
+        if (finalUrl && finalUrl.indexOf(location.origin) === 0) {
+          finalUrl = finalUrl.substring(location.origin.length);
+        }
+
+        // Check if the final URL indicates a cross-project redirect or renamed page
+        var m = finalUrl.match(/\/projects\/([^\/]+)\/wiki\/([^\/?#]+)/);
+        if (m) {
+          var healedProject = m[1];
+          var healedSubitem = decodeURIComponent(m[2]).replace(/_/g, ' ');
+
+          if (candidate.type === 'double_bracket') {
+            candidate.project = healedProject;
+            candidate.subitem = healedSubitem;
+          } else {
+            candidate.url = finalUrl;
+          }
+        }
+
+        proceedWithEdit(ta, candidate);
+      })
+      .catch(function () {
+        proceedWithEdit(ta, candidate);
+      });
+  }
+
+  function proceedWithEdit(ta, candidate) {
     var query = parseLinkToQuery(candidate);
     if (!query) return false;
-    
+
     activeTa = ta;
-    
     var val = ta.value;
     ignoreInput = true;
     ta.value = val.substring(0, candidate.start) + query + val.substring(candidate.end);
-    
+
     tStart = candidate.start;
     tEnd = candidate.start + query.length;
     ta.selectionStart = ta.selectionEnd = tEnd;
-    
+
     ignoreInput = false;
-    
+
     var e = new Event('input', { bubbles: true });
     ta.dispatchEvent(e);
-    
+
     return true;
   }
 
