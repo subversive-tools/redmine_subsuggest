@@ -121,7 +121,7 @@
   var issTimer = null;
 
   /* ════════════════════════════════════════════════════════════════════════
-   * Panel bauen (Drei Spalten für macOS Finder Column View)
+   * Panel bauen (Mehrere Spalten für Spaltenansicht)
    * ════════════════════════════════════════════════════════════════════════ */
   function buildPanel() {
     panel = mk('div', 'sl-panel tribute-container');
@@ -926,7 +926,7 @@
   }
 
   /* ════════════════════════════════════════════════════════════════════════
-   * Cascading Updates (macOS Finder-Style)
+   * Cascading Updates (Kaskadierende Spaltenansicht)
    * ════════════════════════════════════════════════════════════════════════ */
   function updateCol2AndCol3(projIdx) {
     var item = col1Items[projIdx];

@@ -4,13 +4,13 @@
 ![Redmine](https://img.shields.io/badge/Redmine-5.0%20%7C%206.0-red.svg?logo=redmine)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A Redmine plugin that brings smart autocomplete and linking to every wiki text area — macros, mentions, and a powerful multi-level Finder-style link builder.
+A Redmine plugin that brings smart autocomplete and linking to every wiki text area — macros, mentions, and a powerful multi-level column-style link builder.
 
 > Built for teams who write a lot of Redmine text and want fast, discoverable links without remembering syntax.
 
 ## Features
 
-- **`>>` — Finder-Style Smart Linker**: A premium macOS Finder column-style popover to build any link without knowing the syntax:
+- **`>>` — Column-Style Smart Linker**: A premium multi-column cascading popover to build any link without knowing the syntax:
   - **General links**: E-Mail (`mailto:`), Web URL (absolute prefixing), and current page attachments
   - **Hierarchical Project Navigation**: Indented subproject tree sorting with parent context retention
   - **Multi-Level Cascading Columns**: Projects list $\rightarrow$ Subpages list (Issues, Wiki, Members, Files, News, Documents, etc.) $\rightarrow$ Sub-items list
@@ -60,7 +60,7 @@ Type `@` at the start of a word. The member dropdown opens immediately (unlike R
 
 ### `>>` — Smart Linker
 
-Type `>>` after a space or at the start of a line. An ultra-compact Finder-style column opens, showing one active navigation column at a time (width 280px) and following your cursor.
+Type `>>` after a space or at the start of a line. An ultra-compact multi-column panel opens, showing one active navigation column at a time (width 280px) and following your cursor.
 
 #### Intermediate Level Navigation
 - **ArrowUp / ArrowDown**: Navigate through list items in the active column.
@@ -71,7 +71,7 @@ Type `>>` after a space or at the start of a line. An ultra-compact Finder-style
 Typing `#` after a Wiki page name (e.g., `>>project>Wiki>Page#`) or highlighting a page in Column 3 and pressing `Tab` / `ArrowRight` (`→`) triggers **Wiki Anchor Autocomplete**:
 1. It queries the raw content of the Wiki page on the fly.
 2. It parses the page's headings (supports both Textile and Markdown syntax).
-3. It slugifies the headings to match standard Redmine anchors and renders them in Column 4 (displacing previous columns in Finder style).
+3. It slugifies the headings to match standard Redmine anchors and renders them in Column 4 (displacing previous columns in a cascading fashion).
 4. Selecting an anchor and pressing **Enter** inserts a fully formatted Wiki page link with the anchor suffix (e.g., `[[Page#My-Heading]]` or `[Page Title](WikiPageName#My-Heading)`).
 
 #### News, Documents & Project Files

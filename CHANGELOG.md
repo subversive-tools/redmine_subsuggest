@@ -37,7 +37,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - **Dynamic Redmine Core Localization**: Replaced all hardcoded German subpage titles and pre-fill logic with dynamic lookups mapped directly from Redmine's Ruby locale dictionary (`window.REDMINE_SUBPAGE_TRANSLATIONS`). Full native support for English, German, French, Spanish, Japanese, and all other languages.
-- **macOS Finder Column-Style Cascading Dropdown**: Completely updated the dropdown layout to dynamically render active navigation columns in a compact, elegant 280px wide floating window following the cursor.
+- **Cascading Column-Style Dropdown**: Completely updated the dropdown layout to dynamically render active navigation columns in a compact, elegant 280px wide floating window following the cursor.
 - **Real-Time Textarea-Scroll Sync**: As users navigate menu options with ArrowUp/ArrowDown, the textarea's active selection content updates instantly in real time without collapsing or refiltering options lists.
 - **Selective Skipping**: ArrowUp/ArrowDown automatically bypass non-selectable list sections and disabled message placeholders.
 - **Unified 3-Way Next Level Transitions**: Highlighted intermediate items can now be expanded to the next menu level via Tab, Enter, or the Right Arrow key (`→`).
