@@ -24,7 +24,6 @@ A Redmine plugin that brings smart autocomplete and linking to every wiki text a
   - **Accidental Hover Prevention**: Automatic cursor hide and hover gating (`sl-mouse-inactive`) on menu trigger or level changes to avoid misclicks.
 - **`{{` — Macro Autocomplete**: Type `{{` to get a dropdown of all available Redmine macros with descriptions and a full detail preview panel.
 - **`@` — Instant Mention Dropdown**: Shows up immediately after `@` (no minimum character required) for extremely fast user tagging.
-- **100% Dynamic Core Redmine Localization**: Translates all subpage titles, search terms, and backtracking autotexts completely on the fly based on Redmine's Ruby core locale dictionary. Fully supports English, German (disambiguating duplicate files/attachments to *"Dateien"* / *"Anhänge"*), French, Spanish, Japanese, and more.
 
 All features work in **every wiki text area**: wiki pages, issue descriptions, issue notes, journal edits, news comments, forum messages, and project/document descriptions.
 
