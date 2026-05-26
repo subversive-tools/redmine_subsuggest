@@ -62,20 +62,10 @@ You can either navigate options visually (using arrow keys or your mouse cursor)
 - **Tab / Enter / ArrowRight (`→`)**: Expand the highlighted intermediate item (project or subpage branch), appending a `>` delimiter (e.g. `>>myproject>Tickets>`) and cascading to the next adjacent column.
 - **Escape (`Esc`) / ArrowLeft (`←`) / Shift+Tab**: Backtrack one column level to the left, safely reverting the path and restoring the highlighted parent selection without closing the panel.
 
-#### Wiki Page Anchor Autocomplete (Level 4)
+#### Wiki Anchors, News, Documents & Files
 
-Typing `#` after a Wiki page name (e.g., `>>project>Wiki>Page#`) or highlighting a page in Column 3 and pressing `Tab` / `ArrowRight` (`→`) triggers **Wiki Anchor Autocomplete**:
-
-1. It queries the raw content of the Wiki page on the fly.
-2. It parses the page's headings (supports both Textile and Markdown syntax).
-3. It slugifies the headings to match standard Redmine anchors and renders them in Column 4 (displacing previous columns in a cascading fashion).
-4. Selecting an anchor and pressing **Enter** inserts a fully formatted Wiki page link with the anchor suffix (e.g., `[[Page#My-Heading]]` or `[Page Title](WikiPageName#My-Heading)`).
-
-#### News, Documents & Project Files
-
-- **News**: Link project news directly. Auto-completes from `/projects/{project_id}/news.json`, showing comment counts, and inserting clean native links (`news#ID` in Textile, `[Title](news:ID)` in Markdown).
-- **Documents**: Parses project documents dynamically from `/projects/{project_id}/documents` HTML, enabling instant autocomplete lookup.
-- **Files**: Integrates project files via JSON API, inserting native links (`attachment:"filename.ext"` or `![](filename.ext)` for images) and percent-encoding spaces correctly.
+- **Wiki Anchors**: Typing `#` after a Wiki page name or highlighting a page in Column 3 and pressing `Tab` triggers autocomplete for the page's headings.
+- **News, Documents & Files**: Integrates project news (with comment counts), documents (crawled dynamically), and files (via JSON API) for instant lookup and linking.
 
 #### Dynamic Third-Party Addons
 
