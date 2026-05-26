@@ -54,6 +54,8 @@ Type `@` at the start of a word. The member dropdown opens immediately (unlike R
 
 Type `>>` after a space or at the start of a line. An ultra-compact multi-column panel opens, showing one active navigation column at a time (width 280px) and following your cursor.
 
+You can either navigate options visually (using arrow keys or your mouse cursor) or type text to filter options in real-time and press `Tab`/`Enter` to autocomplete and drill down.
+
 #### Intermediate Level Navigation
 
 - **ArrowUp / ArrowDown**: Navigate through list items in the active column.
