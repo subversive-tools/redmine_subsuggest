@@ -27,6 +27,7 @@ Redmine::Plugin.register :redmine_subsuggest do
   }, partial: 'settings/subsuggest_settings'
 end
 
-# Load the hook class — self-registers with Redmine::Hook on load
+# Load the hook class — self-registers with Redmine::Hook on load.
+# We use require_relative explicitly (not Rails autoloading / Zeitwerk)
+# so that the class is available immediately during plugin initialization.
 require_relative 'lib/subsuggest_hook'
-SubsuggestHook

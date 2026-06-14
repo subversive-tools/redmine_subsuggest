@@ -6,13 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.5.1] - 2026-06-14
 
 ### Changed
-- Plugin renamed to `redmine_subsuggest`
-  - Plugin identifier: `:redmine_subtrigger` → `:redmine_subsuggest`
-  - Hook class: `SubtriggerHook` → `SubsuggestHook`
-  - CSS classes: `.subtrigger-*` → `.subsuggest-*`
-  - Internal JS properties: `_subtrigger*` → `_subsuggest*`
-  - CSS file: `subtrigger.css` → `subsuggest.css`
-  - Tooltip class: `.subtrigger-tooltip` → `.subsuggest-tooltip`
+- **Plugin renamed** from `redmine_subtrigger` to `redmine_subsuggest` — all identifiers, class names, CSS classes, and JS properties updated accordingly.
+- Now compatible with Redmine v4 and later.
+
+### Fixed
+- **Zeitwerk compatibility**: Removed bare constant reference `SubsuggestHook` from `init.rb` that caused a `NameError: uninitialized constant` on Redmine instances using Zeitwerk eager-loading. The hook class is now loaded exclusively via `require_relative`, which is the correct approach for Redmine plugin initialization.
 
 ## [0.5.0] - 2026-05-26
 
