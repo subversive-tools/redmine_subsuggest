@@ -1,5 +1,5 @@
 /**
- * smart_linker.js — Redmine Subtrigger: Smart Linker
+ * smart_linker.js — Redmine Subsuggest: Smart Linker
  *
  * Trigger: >> (nach Leerzeichen oder Zeilenanfang)
  *
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
 
-  var config = window.REDMINE_SUBTRIGGER_CONFIG || {
+  var config = window.REDMINE_SUBSUGGEST_CONFIG || {
     enable_macros: true,
     enable_mentions: true,
     enable_smart_linker: true,
@@ -1304,7 +1304,7 @@
       cb();
     })
     .catch(function (err) {
-      console.warn('[Subtrigger] Failed to fetch HTML documents:', err);
+      console.warn('[Subsuggest] Failed to fetch HTML documents:', err);
       cache.documents[pid] = [];
       cb();
     });
@@ -1845,22 +1845,6 @@
       }
     }
 
-    // Pattern 12: Mention: @jsmith
-    var mentionRegex = /\b@([a-z0-9\-_]+)\b/gi;
-    while ((match = mentionRegex.exec(val)) !== null) {
-      if (pos >= match.index && pos <= match.index + match[0].length) {
-        candidates.push({
-          type: 'user_link',
-          text: match[0],
-          project: '',
-          userId: '',
-          userLogin: match[1],
-          start: match.index,
-          end: match.index + match[0].length
-        });
-      }
-    }
-
     // Pattern 13: Project links: project#3, project:some-project, project:"Some Project"
     var projRegex = /\bproject(?:#(\d+)\b|:([^"\s]+)\b|:"([^"]+)")/gi;
     while ((match = projRegex.exec(val)) !== null) {
@@ -2138,7 +2122,7 @@
     left = Math.max(4, left);
 
     var tooltip = document.createElement('div');
-    tooltip.className = 'subtrigger-tooltip';
+    tooltip.className = 'subsuggest-tooltip';
     tooltip.style.cssText = 'position:fixed;background:#2d3748;color:#fff;padding:4px 8px;border-radius:3px;font-size:11px;z-index:100005;box-shadow:0 2px 6px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;pointer-events:none;opacity:0;transition:opacity 0.2s, transform 0.2s;transform:translateY(5px);white-space:nowrap;';
     tooltip.textContent = message;
 

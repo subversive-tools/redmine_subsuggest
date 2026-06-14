@@ -11,7 +11,7 @@
   function createDropdown() {
     var d = document.createElement('div');
     // Reuse Redmine's existing .tribute-container styles (tribute-5.1.3.css + application.css)
-    d.className = 'tribute-container subtrigger-container';
+    d.className = 'tribute-container subsuggest-container';
     d.style.display  = 'none';
     // fixed: viewport-relative, immune to overflow:hidden on any ancestor
     d.style.position = 'fixed';
@@ -22,7 +22,7 @@
     d.appendChild(macList);
 
     macDetail = document.createElement('div');
-    macDetail.className = 'subtrigger-detail';
+    macDetail.className = 'subsuggest-detail';
     macDetail.style.display = 'none';
     d.appendChild(macDetail);
 
@@ -33,8 +33,8 @@
   // ── Attach to textarea ───────────────────────────────────────────────────────
 
   function attach(textarea) {
-    if (textarea._subtriggerBound) return;
-    textarea._subtriggerBound = true;
+    if (textarea._subsuggestBound) return;
+    textarea._subsuggestBound = true;
 
     textarea.addEventListener('input', function () { onInput(this); });
     textarea.addEventListener('keydown', onKeydown.bind(textarea));
@@ -111,10 +111,100 @@
     }
   }
 
+  function getMacroAtCursor(textarea) {
+    var val = textarea.value;
+    var pos = textarea.selectionStart;
+    var regex = /\{\{([^}]+)\}\}/g;
+    var match;
+    while ((match = regex.exec(val)) !== null) {
+      var start = match.index;
+      var end = match.index + match[0].length;
+      if (pos >= start && pos <= end) {
+        return {
+          name: match[1],
+          start: start,
+          end: end
+        };
+      }
+    }
+    return null;
+  }
+
+  function getMentionAtCursor(textarea) {
+    var val = textarea.value;
+    var pos = textarea.selectionStart;
+    var regex = /\b@([a-z0-9\-_]+)\b/gi;
+    var match;
+    while ((match = regex.exec(val)) !== null) {
+      var start = match.index;
+      var end = match.index + match[0].length;
+      if (pos >= start && pos <= end) {
+        return {
+          login: match[1],
+          start: start,
+          end: end
+        };
+      }
+    }
+    return null;
+  }
+
   // ── Keyboard handling ────────────────────────────────────────────────────────
 
   function onKeydown(e) {
-    if (dropdown.style.display === 'none') return;
+    var ta = this;
+    if (dropdown.style.display === 'none') {
+      if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        var config = window.REDMINE_SUBSUGGEST_CONFIG || {};
+
+        // 1. Check for Macro Autocomplete
+        if (config.enable_macros !== false) {
+          var macro = getMacroAtCursor(ta);
+          if (macro) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var val = ta.value;
+            var replacement = '{{' + macro.name;
+            ta.value = val.substring(0, macro.start) + replacement + val.substring(macro.end);
+            ta.selectionStart = ta.selectionEnd = macro.start + replacement.length;
+
+            activeTextarea = ta;
+            render(macro.name, ta, macro.start);
+            return;
+          }
+        }
+
+        // 2. Check for Mention Autocomplete
+        if (config.enable_mentions !== false) {
+          var mention = getMentionAtCursor(ta);
+          if (mention) {
+            var tribute = ta.tribute || ta._tribute || ta._tributeInstance;
+            if (tribute && tribute.collection) {
+              var idx = -1;
+              for (var i = 0; i < tribute.collection.length; i++) {
+                if (tribute.collection[i].trigger === '@') {
+                  idx = i;
+                  break;
+                }
+              }
+              if (idx !== -1) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Put selection at the end of the mention so Tribute parses the full login as query
+                ta.selectionStart = ta.selectionEnd = mention.end;
+
+                // Programmatically trigger Tribute
+                tribute.showMenuForCollection(ta, idx);
+                return;
+              }
+            }
+          }
+        }
+      }
+      return;
+    }
 
     var items = macList.querySelectorAll('li');
 
@@ -283,7 +373,7 @@
   var MAX_MENTION_RESULTS = 10;
 
   function patchTributeOnElement(el) {
-    if (el._subtriggerTributePatchDone) return;
+    if (el._subsuggestTributePatchDone) return;
     // Tribute 5.x attaches the instance as element.tribute (fallbacks for other versions)
     var tribute = el.tribute || el._tribute || el._tributeInstance;
     if (!tribute || !tribute.collection) return;
@@ -295,18 +385,18 @@
       col.menuShowMinLength = 0;
 
       // Wrap values() to cap results at MAX_MENTION_RESULTS
-      if (!col._subtriggerLimited) {
+      if (!col._subsuggestLimited) {
         var orig = col.values;
         col.values = function (text, cb) {
           orig.call(col, text, function (results) {
             cb((results || []).slice(0, MAX_MENTION_RESULTS));
           });
         };
-        col._subtriggerLimited = true;
+        col._subsuggestLimited = true;
       }
     });
 
-    el._subtriggerTributePatchDone = true;
+    el._subsuggestTributePatchDone = true;
   }
 
   function patchAllTribute() {
@@ -318,7 +408,7 @@
   // ── Init ─────────────────────────────────────────────────────────────────────
 
   function init() {
-    var config = window.REDMINE_SUBTRIGGER_CONFIG || {
+    var config = window.REDMINE_SUBSUGGEST_CONFIG || {
       enable_macros: true,
       enable_mentions: true,
       enable_smart_linker: true,

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.1] - 2026-06-14
+
+### Changed
+- Plugin renamed to `redmine_subsuggest`
+  - Plugin identifier: `:redmine_subtrigger` → `:redmine_subsuggest`
+  - Hook class: `SubtriggerHook` → `SubsuggestHook`
+  - CSS classes: `.subtrigger-*` → `.subsuggest-*`
+  - Internal JS properties: `_subtrigger*` → `_subsuggest*`
+  - CSS file: `subtrigger.css` → `subsuggest.css`
+  - Tooltip class: `.subtrigger-tooltip` → `.subsuggest-tooltip`
+
 ## [0.5.0] - 2026-05-26
 
 ### Added
